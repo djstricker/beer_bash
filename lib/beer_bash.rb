@@ -1,6 +1,7 @@
 
 require 'beer_bash/beer_menus'
 require 'beer_bash/version'
+require 'beer_bash/beeradvocate'
 require 'mechanize'
 require 'terminal-table'
 
@@ -24,11 +25,16 @@ module BeerBash
 
       def print(place)
         tap_list = place.on_tap
+        beeradvocate_scraper = BeerAdvocate::Scraper.new
 
         table = Terminal::Table.new do |t|
           t.title    = "#{place} * Updated #{format_date(tap_list.updated_at)}"
-          t.headings = %w(Beer ABV Format Price)
-          t.rows     = tap_list.taps.collect {|beer| [beer.name, beer.abv, beer.format, beer.price]}
+          t.headings = %w(Beer ABV Format Price Score)
+          t.rows     = tap_list.taps.collect do |beer|
+                         beeradvocate_profile = beeradvocate_scraper.find_beer_by_name(beer.name)
+                         beer['score'] = beeradvocate_profile ? beeradvocate_profile[:score] : '-'
+                         [beer.name, beer.abv, beer.format, beer.price, beer.score]
+                       end
           (1..3).each {|idx| t.align_column(idx, :right)}
         end
 

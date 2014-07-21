@@ -24,7 +24,7 @@ module BeerBash
 
     TapList = Struct.new(:updated_at, :taps)
 
-    Beer = Struct.new(:name, :abv, :format, :price) do
+    Beer = Struct.new(:name, :abv, :format, :price, :score) do
       def on_tap?
         format =~ /draft|cask|growler/i
       end
@@ -76,7 +76,7 @@ module BeerBash
             abv    = row.at('td[2]').text.strip
             format = row.at('td[3]').text.strip
             price  = row.at('td[4]').text.strip
-            beer   = Beer.new(name, abv, format, price)
+            beer   = Beer.new(name, abv, format, price, '')
             beers  << beer if beer.on_tap?
           end
         end
