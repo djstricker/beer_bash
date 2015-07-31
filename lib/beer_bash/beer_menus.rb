@@ -51,7 +51,7 @@ module BeerBash
         end
 
         def scrape(url)
-          agent.get(url)
+          agent.get(url, [], nil, {'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'})
         end
 
         def places_url(place_name)
