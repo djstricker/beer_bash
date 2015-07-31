@@ -31,7 +31,7 @@ module BeerBash
     end
 
     class Scraper
-      BASE_URL = 'http://www.beermenus.com'
+      BASE_URL = 'https://www.beermenus.com'
 
       def places(name)
         page = scrape(places_url(name))
